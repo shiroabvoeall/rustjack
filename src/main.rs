@@ -1,7 +1,6 @@
 //Imports
 use std::io;
 use std::io::Write;
-use std::{thread, time};
 use rand::Rng;
 
 fn main() {
@@ -9,15 +8,13 @@ fn main() {
     let mut card_value: i8 = 0;
     let mut dealer_val: i8 = 0;
     let mut respo_hs = String::new();
-    let duration = time::Duration::new(3, 0);
 
     card_value = hit(&mut card_value);
     dealer_val = hit(&mut dealer_val);
 
     loop {
         if twentyone(&mut card_value, &mut dealer_val) {
-            thread::sleep(duration);
-            break;
+            playagain(&mut card_value, &mut dealer_val);
         }
 
         print!("\nDealer's value : {}", dealer_val);
@@ -29,8 +26,7 @@ fn main() {
                 card_value = hit(&mut card_value);
                 respo_hs.clear();
                 if bustcheck(&mut card_value) {
-                    thread::sleep(duration);
-                    break;
+                    playagain(&mut card_value, &mut dealer_val);
                 }
             }
             "s" => {
@@ -39,12 +35,10 @@ fn main() {
                     dealer_val = hit(&mut dealer_val);
                 }
                 if checker_dealer(&mut dealer_val) {
-                    thread::sleep(duration);
-                    break;
+                    playagain(&mut card_value, &mut dealer_val);
                 }
                 wincond(&mut dealer_val, &mut card_value);
-                thread::sleep(duration);
-                break;
+                playagain(&mut card_value, &mut dealer_val);
             }
             _ => {
                 print!("Your input '{}' is not a valid command\n", respo_hs.trim());
@@ -114,4 +108,28 @@ fn pushr(respo_hs: &mut String) {
     io::stdin()
         .read_line(respo_hs)
         .expect("Err");
+}
+
+fn playagain(card_value: &mut i8, dealer_val: &mut i8) {
+    let mut ans = String::new();
+
+    print!("Do you want to play again? : ");
+    push();
+    io::stdin()
+        .read_line(&mut ans)
+        .expect("Err");
+    
+    match ans.trim().to_lowercase().as_str() {
+        "y" => resetval(card_value, dealer_val),
+        "n" => std::process::exit(0),
+        _ => {
+            println!("Your response {} is invalid!", ans.trim());
+            playagain(card_value, dealer_val)
+        }
+    }
+}
+
+fn resetval(card_value: &mut i8, dealer_val: &mut i8) {
+    *card_value = 0;
+    *dealer_val = 0;
 }
