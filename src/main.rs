@@ -1,3 +1,4 @@
+//Imports
 use std::io;
 use std::io::Write;
 use rand::Rng;
