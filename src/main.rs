@@ -1,6 +1,7 @@
 //Imports
 use std::io;
 use std::io::Write;
+use std::{thread, time};
 use rand::Rng;
 
 fn main() {
@@ -8,12 +9,14 @@ fn main() {
     let mut card_value: i8 = 0;
     let mut dealer_val: i8 = 0;
     let mut respo_hs = String::new();
+    let duration = time::Duration::new(3, 0);
 
     card_value = hit(&mut card_value);
     dealer_val = hit(&mut dealer_val);
 
     loop {
         if twentyone(&mut card_value, &mut dealer_val) {
+            thread::sleep(duration);
             break;
         }
 
@@ -26,6 +29,7 @@ fn main() {
                 card_value = hit(&mut card_value);
                 respo_hs.clear();
                 if bustcheck(&mut card_value) {
+                    thread::sleep(duration);
                     break;
                 }
             }
@@ -35,9 +39,11 @@ fn main() {
                     dealer_val = hit(&mut dealer_val);
                 }
                 if checker_dealer(&mut dealer_val) {
+                    thread::sleep(duration);
                     break;
                 }
                 wincond(&mut dealer_val, &mut card_value);
+                thread::sleep(duration);
                 break;
             }
             _ => {
