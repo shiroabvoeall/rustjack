@@ -51,7 +51,6 @@ fn main() {
 }
 
 // FUNCTIONS 
-
 fn twentyone(card_value: &mut i8, dealer_val: &mut i8) -> bool {
     if *card_value == 21 {
         println!("\nYour total : {}\nDealer's total : {}\nBLACKJACK! YOU WON!", *card_value, *dealer_val);
